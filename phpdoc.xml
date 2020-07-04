@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+  <title>OpenSums Development plugin for WordPress™ v0.1.0-dev</title>
+  <parser>
+    <target>docs/temp</target>
+  </parser>
+
+  <transformer>
+    <target>docs/api</target>
+  </transformer>
+
+  <logging>
+    <level>crit</level>
+  </logging>
+
+  <transformations>
+      <template name="clean" />
+  </transformations>
+
+  <files>
+    <file>opensums-wp-dev.php</file>
+    <directory>src</directory>
+    <directory>opensums-wp-src</directory>
+  </files>
+</phpdoc>
