@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<phpunit
+  bootstrap="tests/integration/bootstrap.php"
+  backupGlobals="false"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  >
+
+  <logging>
+    <log type="coverage-html" target="docs/test/coverage"/>
+    <!-- lowUpperBound="35" highLowerBound="70"/ -->
+    <!-- log type="coverage-clover" target="/tmp/coverage.xml"/ -->
+    <!-- log type="coverage-php" target="/tmp/coverage.serialized"/ -->
+    <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    <!-- log type="junit" target="/tmp/logfile.xml"/ -->
+    <log type="testdox-html" target="docs/test/testdox.html"/>
+    <log type="testdox-text" target="docs/test/testdox.txt"/>
+  </logging>
+
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src</directory>
+      <directory suffix=".php">opensums-wp-src</directory>
+      <exclude>
+        <!-- file>src/autoload.php</file -->
+      </exclude>
+    </whitelist>
+  </filter>
+
+  <testsuites>
+
+    <testsuite name="Integration tests">
+      <directory prefix="test-" suffix=".php">./tests/integration/</directory>
+    </testsuite>
+
+  </testsuites>
+</phpunit>
