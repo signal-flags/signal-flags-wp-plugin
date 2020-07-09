@@ -4,7 +4,9 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "SignalFlags\\": "src"
+            "SignalFlagsPlugin\\WpPlugin\\": "signal-flags/vendor/opensums/wp-plugin/src",
+            "SignalFlagsPlugin\\SignalFlags\\": "signal-flags/vendor/opensums/signal-flags/src",
+            "SignalFlagsPlugin\\": "signal-flags/src"
         }
     },
     "require": {},
@@ -15,6 +17,7 @@
     "scripts": {
         "apidocs": "bash ./bin/apidocs.sh",
         "build": "bash ./bin/build.sh",
+        "build:flags": "php ./bin/build-images.php",
         "test": "./vendor/bin/phpunit",
         "testdocs": "./vendor/bin/phpunit -c phpunit-docs.xml",
         "version": "bash ./bin/version.sh"

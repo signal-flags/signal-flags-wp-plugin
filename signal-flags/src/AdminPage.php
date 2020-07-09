@@ -16,15 +16,30 @@ use SignalFlagsPlugin\WpPlugin\AdminPage as BaseAdminPage;
 class AdminPage extends BaseAdminPage {
     protected $signalFlags;
 
+    protected $settingsGroups = [
+        'user-settings' => [
+        ],
+    ];
+
+    public function __construct($plugin, $options) {
+        parent::__construct($plugin, $options);
+        $this->settingsGroups = [
+            'user-settings' => [
+                'validate' => function ($dirty) {
+                    $clean = [
+                        'default-flag-set' => basename($dirty['default-flag-set'] ?? ''),
+                    ];
+                    return $clean;
+                },
+            ],
+        ];
+    }
+
     protected function getContext(): array {
-        if (!$this->signalFlags) {
-            $this->signalFlags = new SignalFlags\SignalFlags();
-        }
         return [
-            'flags' => $this->signalFlags,
             'plugin' => [
                 'name' => $this->plugin->getName(),
-                'slug' => $this->plugin->slugify(),
+                // 'slug' => $this->plugin->slugify(),
                 'version' => $this->plugin->getVersion(),
             ],
         ];

@@ -27,43 +27,51 @@ class Admin extends BaseAdmin {
         $this->adminPage = new AdminPage($this->plugin, [
             'template' => 'admin/settings-page',
             'sectionTemplate' => 'admin/settings-page-sections',
-            'savedMessage' => __('Signal Flags settings saved at', 'signal-flags'),
+            'menuParent' => 'settings',
         ]);
+
+        $signalFlags = $this->plugin->getSignalFlags();
+        // Set up the default flag set selections.
+        $flagSetFiles = $signalFlags->getFlagSetFiles();
+        $flagSets = [];
+        foreach ($flagSetFiles as $file) {
+            $flags = include($file);
+            $flagSets[basename($file, '.php')] = $flags['meta']['description'];
+        }
+
+        // Set up the current default flag set display.
+        $currentFlagsHtml = '<div style="display: flex; flex-wrap: wrap; height: 200px; overflow: auto;">';
+        foreach ($signalFlags->keys() as $key) {
+            $currentFlagsHtml .= ($signalFlags->get($key, [ 'width' => 60, 'margin' => 2 ]));
+        }
+        $currentFlagsHtml .= '</div>';
 
         $this->adminPage->addSections([
             // placeholder
             // helper to the right
             // supplemental underneath
             [
-                // The default settings options group for this section.
-                'group' => 'defaults',
+                'id' => 'intro',
+                'title' => __('Quick start', 'signal-flags'),
+            ],
+            [
+                // This is prefixed and used as the key in the wp_options table.
+                'group' => 'user-settings',
                 // Prefixed and used as the section element's id.
-                'id' => 'defaults',
-                'title' => 'Default flag set',
+                'id' => 'default-flags',
+                'title' => __('Default flag set', 'signal-flags'),
                 'fields' => [
                     [
-                        // Prefixed and used as the element's id.
-                        'id' => 'default-colors',
-                        'label' => __('Colours', 'signal-flags'),
-                        'type' => 'select',
-                        'options' => ['default' => 'Default', 'b' => 'Primary'],
+                        'id' => 'current-default',
+                        'label' => __('Current default set', 'signal-flags'),
+                        'type' => 'html',
+                        'html' => $currentFlagsHtml,
                     ],
                     [
-                        'id' => 'default-shape',
-                        'label' => __('Shape', 'signal-flags'),
+                        'id' => 'default-flag-set',
+                        'label' => __('Change default set', 'signal-flags'),
                         'type' => 'select',
-                        'options' => [
-                            'square' => 'Square',
-                            '3x2' => '3:2',
-                            '4x3' => '4:3',
-                            '16x9' => '16:9',
-                        ],
-                        'helper' => __('The aspect ratio of letter flags C-Z', 'signal-flags'),
-                    ],
-                    [
-                        // Prefixed and used as the element's id.
-                        'id' => 'default-width',
-                        'label' => __('Width', 'signal-flags'),
+                        'options' => $flagSets,
                     ],
                 ],
             ],
@@ -71,14 +79,14 @@ class Admin extends BaseAdmin {
                 // The default settings options group for this section.
                 // 'group' => 'defaults',
                 // Prefixed and used as the section element's id.
-                'id' => 'show-defaults',
+                'id' => 'save-settings',
             ],
             [
                 // The default settings options group for this section.
                 // 'group' => 'defaults',
                 // Prefixed and used as the section element's id.
-                'id' => 'system',
-                'title' => 'System information',
+                'id' => 'about',
+                'title' => __('About Signal Flags', 'signal-flags'),
             ],
         ]);
     }

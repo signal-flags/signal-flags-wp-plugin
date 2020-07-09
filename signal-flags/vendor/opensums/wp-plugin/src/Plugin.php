@@ -1,13 +1,7 @@
 <?php
 
-/**
- * File header goes here.
- */
-
 namespace SignalFlagsPlugin\WpPlugin;
 
-/**
- */
 class Plugin {
     // --- YOU MUST OVERRIDE THESE IN THE PLUGIN CLASS -------------------------
     /** @var string Name of the admin class. */

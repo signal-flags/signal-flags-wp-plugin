@@ -19,7 +19,7 @@ class Plugin extends BasePlugin {
     protected $slug = 'signal-flags';
 
     /** @var string Current version. */
-    protected $version = '0.1.0-dev';
+    protected $version = '1.0.0';
 
     /** @var string Class for install/uninstall. */
     protected $installClass = Install::class;
@@ -38,18 +38,19 @@ class Plugin extends BasePlugin {
         add_shortcode('signal-flag', [$this, 'signalFlagShortcode']);
         add_shortcode('signal-flags', [$this, 'signalFlagsShortcode']);
 
-        add_filter('upload_mimes', [$this, 'allowSvgUpload']);
+        if ($this->settings->get('allow_svg_upload')) {
+            add_filter('upload_mimes', [$this, 'allowSvgUpload']);
+        }
     }
 
     public function getSignalFlags() {
         if (!$this->signalFlags) {
-            $this->signalFlags = new SignalFlags();
+            $user_settings = get_option('signal_flags_user_settings', []);
+            $this->signalFlags = new SignalFlags([
+                'flagsFile' => $user_settings['default-flag-set'] ?? 'signal-flags-00',
+            ]);
         }
         return $this->signalFlags;
-        // Must call the parent to set up admin if we need to.
-        parent::load();
-        // Register all hooks here.
-        add_shortcode('signal-flag', [$this, 'signalFlagShortcode']);
     }
 
     public function signalFlagShortcode($atts, string $content, string $tag): string {
@@ -59,6 +60,7 @@ class Plugin extends BasePlugin {
             // If the shortcode has no attributes $atts will be an empty string.
             'width' => $atts['width'] ?? null,
             'height' => $atts['height'] ?? null,
+            'margin' => $atts['margin'] ?? null,
             'display' => $atts['display'] ?? 'inline',
         ];
         try {
@@ -73,6 +75,7 @@ class Plugin extends BasePlugin {
             // If the shortcode has no attributes $atts will be an empty string.
             'width' => $atts['width'] ?? null,
             'height' => $atts['height'] ?? null,
+            'margin' => $atts['margin'] ?? null,
             'display' => $atts['display'] ?? 'inline',
         ];
         $flags = '';

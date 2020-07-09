@@ -13,6 +13,7 @@ class AdminPage {
         'capability' => 'manage_options',
     ];
 
+    protected $settingsGroups = [];
     protected $groups = [];
     protected $sections;
 
@@ -62,15 +63,6 @@ class AdminPage {
         }
         $vars = $this->settings;
         $vars['messagesSlug'] = $this->plugin->slugify('messages');
-        if (isset($_GET['settings-updated'])) {
-            // add settings saved message with the class of "updated"
-            add_settings_error(
-                $this->plugin->slugify('messages'),
-                $this->plugin->slugify('message'),
-                $this->settings['savedMessage'] . ' ' . date('H:i'),
-                'updated' // CSS class.
-            );
-        }
         $this->plugin->render($this->settings['template'], array_merge($this->getContext(), $vars));
     }
 
@@ -158,9 +150,27 @@ class AdminPage {
                 );
             }
         }
+        // Should refactor the whole thing to better integrate the settings and options APIs.
         foreach (array_keys($this->groups) as $group) {
             $optionName = $this->plugin->slugify($group, '_');
-            register_setting($this->settings['pageSlug'], $optionName);
+
+            $settingsGroup = $this->settingsGroups[$group] ?? null;
+
+            if ($settingsGroup) {
+                register_setting(
+                    // Option group.
+                    $this->settings['pageSlug'],
+                    // Option name.
+                    $optionName,
+                    [
+                        'type' => 'array',
+                        'sanitize_callback' => $settingsGroup['validate'],
+                    ]
+                );
+            } else {
+                register_setting($this->settings['pageSlug'], $optionName);
+            }
+
             $this->values[$group] = get_option($optionName);
         }
     }
@@ -170,7 +180,7 @@ class AdminPage {
      */
     public function renderField($field) {
         if (is_array($this->values[$field['group']])) {
-            $value = $this->values[$field['group']][$field['key']];
+            $value = $this->values[$field['group']][$field['key']] ?? null;
         } else {
             $value = null;
         }
@@ -205,6 +215,9 @@ class AdminPage {
                         $options_markup
                     );
                 }
+                break;
+            case 'html': // Just render the html
+                echo($field['html']);
                 break;
             case 'text': // If it is a text field
             default:

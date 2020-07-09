@@ -10,12 +10,12 @@
  *
  * @wordpress ```
  * Plugin Name:       Signal Flags
- * Description:       Integrate some flags from the Interational Code of Signals (and more).
- * Version:           0.0.0-dev
- * Requires at least: 5.2 - check this
- * Requires PHP:      7.2 - check this
+ * Description:       Display signal flags (ICS) and other nautical flags on your website.
+ * Version:           1.0
+ * Requires at least: 4.7
+ * Requires PHP:      7.2
  * Author:            OpenSums
- * Author URI:        https://opensums.com/
+ * Author URI:        https://github.com/signal-flags/
  * Text Domain:       signal-flags
  * License:           MIT
  * License URI:       https://github.com/signal-flags/signal-flags-wp/LICENSE

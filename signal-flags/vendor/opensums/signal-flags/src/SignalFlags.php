@@ -5,11 +5,29 @@ declare(strict_types=1);
 namespace SignalFlagsPlugin\SignalFlags;
 
 class SignalFlags {
-    protected static $defaults = [];
+
+    protected $flagsDir = __DIR__.'/../flags';
+
+    protected static $defaults = [
+        'flagsFile' => 'signal-flags-00',
+    ];
 
     public function __construct(array $options = []) {
         $this->settings = array_merge(self::$defaults, $options);
-        $this->flags = include(__DIR__.'/../flags/100-svg-4x3-outline-standard.php');
+        $this->setDefaultFlags($this->settings['flagsFile']);
+    }
+
+    public function setDefaultFlags(string $file, bool $absolute = false): self {
+        try {
+            $fileName = $absolute ? $file : "{$this->flagsDir}/{$file}.php";
+            $flags = file_exists($fileName) ? include($fileName) : false;
+            if ($flags) {
+                $this->flags = $flags;
+                return $this;
+            }
+        } catch (\Throwable $e) {
+        }
+        throw new \Exception('Could not load flags file ' . $fileName);
     }
 
     public function all(): array {
@@ -31,9 +49,14 @@ class SignalFlags {
         return array_key_exists($id, $this->flags['flags']);
     }
 
+    public function getFlagSetFiles() {
+        return glob(__DIR__.'/../flags/signal-flags-*');
+    }
+
     protected function applyOptions(string $svg, array $options = []): string {
         $styles = [];
         foreach ($options as $option => $value) {
+            if ($value === null) continue;
             switch ($option) {
                 case 'height':
                     $styles[] = is_numeric($value) ? "height: {$value}px" : "height: {$value}";
@@ -52,6 +75,6 @@ class SignalFlags {
         }
         if (!$styles) return $svg;
         $styles = implode('; ', $styles);
-        return str_replace('svg', "svg style='$styles'", $svg);
+        return str_replace('<svg', "<svg style='$styles'", $svg);
     }
 }

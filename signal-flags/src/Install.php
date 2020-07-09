@@ -14,5 +14,6 @@ class Install {
 
     public static function uninstall() {
         // Called on delete - note that this must be a static method.
+        delete_option('signal_flags_user_settings');
     }
 }

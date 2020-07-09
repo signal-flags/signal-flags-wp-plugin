@@ -22,8 +22,8 @@
 settings_fields($pageSlug);
 // output setting sections and their fields
 do_settings_sections($pageSlug);
-// output save settings button
-submit_button('Save Settings');
+// output save settings button - moved up into sections.
+// submit_button('Save Settings');
 
 ?>
 </form>
