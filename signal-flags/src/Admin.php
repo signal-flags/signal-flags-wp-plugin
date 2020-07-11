@@ -28,6 +28,7 @@ class Admin extends BaseAdmin {
             'template' => 'admin/settings-page',
             'sectionTemplate' => 'admin/settings-page-sections',
             'menuParent' => 'settings',
+            'pageTitle' => 'Signal Flags'
         ]);
 
         $signalFlags = $this->plugin->getSignalFlags();
@@ -36,7 +37,7 @@ class Admin extends BaseAdmin {
         $flagSets = [];
         foreach ($flagSetFiles as $file) {
             $flags = include($file);
-            $flagSets[basename($file, '.php')] = $flags['meta']['description'];
+            $flagSets[basename($file, '.php')] = $flags['meta']['description']['short'];
         }
 
         // Set up the current default flag set display.
@@ -45,15 +46,13 @@ class Admin extends BaseAdmin {
             $currentFlagsHtml .= ($signalFlags->get($key, [ 'width' => 60, 'margin' => 2 ]));
         }
         $currentFlagsHtml .= '</div>';
+        $description = str_replace("\n\n", "</p>\n<p>", $this->plugin->getSignalFlags()->getMeta()['description']['full']);
+        $currentFlagsHtml .= "<p>$description</p>";
 
         $this->adminPage->addSections([
             // placeholder
             // helper to the right
             // supplemental underneath
-            [
-                'id' => 'intro',
-                'title' => __('Quick start', 'signal-flags'),
-            ],
             [
                 // This is prefixed and used as the key in the wp_options table.
                 'group' => 'user-settings',
@@ -74,19 +73,6 @@ class Admin extends BaseAdmin {
                         'options' => $flagSets,
                     ],
                 ],
-            ],
-            [
-                // The default settings options group for this section.
-                // 'group' => 'defaults',
-                // Prefixed and used as the section element's id.
-                'id' => 'save-settings',
-            ],
-            [
-                // The default settings options group for this section.
-                // 'group' => 'defaults',
-                // Prefixed and used as the section element's id.
-                'id' => 'about',
-                'title' => __('About Signal Flags', 'signal-flags'),
             ],
         ]);
     }
