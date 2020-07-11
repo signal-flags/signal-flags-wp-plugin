@@ -9,7 +9,7 @@ class SignalFlags {
     protected $flagsDir = __DIR__.'/../flags';
 
     protected static $defaults = [
-        'flagsFile' => 'signal-flags-00',
+        'flagsFile' => 'flags-0',
     ];
 
     public function __construct(array $options = []) {
@@ -50,7 +50,11 @@ class SignalFlags {
     }
 
     public function getFlagSetFiles() {
-        return glob(__DIR__.'/../flags/signal-flags-*');
+        return glob(__DIR__.'/../flags/*');
+    }
+
+    public function getMeta() {
+        return $this->flags['meta'];
     }
 
     protected function applyOptions(string $svg, array $options = []): string {
@@ -59,7 +63,26 @@ class SignalFlags {
             if ($value === null) continue;
             switch ($option) {
                 case 'height':
-                    $styles[] = is_numeric($value) ? "height: {$value}px" : "height: {$value}";
+                    if (is_numeric($value)) {
+                        $styles[] = "height: {$value}px";
+                    } elseif ($value === 'inline') {
+                        $styles[] = 'display: inline';
+                        $styles[] = 'vertical-align: text-bottom';
+                        $styles[] = 'height: 1.2em';
+                    } elseif ($value === 'inline-l') {
+                        $styles[] = 'display: inline';
+                        $styles[] = 'vertical-align: text-bottom';
+                        $styles[] = 'height: 1.5em';
+                    } elseif ($value === 'inline-s') {
+                        $styles[] = 'display: inline';
+                        $styles[] = 'vertical-align: text-bottom';
+                        $styles[] = 'height: 1em';
+                    } else {
+                        $styles[] = "height: {$value}";
+                    }
+                    break;
+                case 'display':
+                    $styles[] = "display: {$value}";
                     break;
                 case 'width':
                     $styles[] = is_numeric($value) ? "width: {$value}px" : "width: {$value}";

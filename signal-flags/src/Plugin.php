@@ -19,7 +19,7 @@ class Plugin extends BasePlugin {
     protected $slug = 'signal-flags';
 
     /** @var string Current version. */
-    protected $version = '1.0.0';
+    protected $version = '1.1.0';
 
     /** @var string Class for install/uninstall. */
     protected $installClass = Install::class;
@@ -46,9 +46,14 @@ class Plugin extends BasePlugin {
     public function getSignalFlags() {
         if (!$this->signalFlags) {
             $user_settings = get_option('signal_flags_user_settings', []);
-            $this->signalFlags = new SignalFlags([
-                'flagsFile' => $user_settings['default-flag-set'] ?? 'signal-flags-00',
-            ]);
+            try {
+                $this->signalFlags = new SignalFlags([
+                    'flagsFile' => $user_settings['default-flag-set'] ?? 'signal-flags-00',
+                ]);
+            } catch (\Throwable $e) {
+                // Couldn't load the requested flagset so load the default one.
+                $this->signalFlags = new SignalFlags();
+            }
         }
         return $this->signalFlags;
     }
@@ -61,7 +66,7 @@ class Plugin extends BasePlugin {
             'width' => $atts['width'] ?? null,
             'height' => $atts['height'] ?? null,
             'margin' => $atts['margin'] ?? null,
-            'display' => $atts['display'] ?? 'inline',
+            'display' => $atts['display'] ?? null,
         ];
         try {
             return $this->getSignalFlags()->get(strtolower($id), $options);
@@ -76,7 +81,7 @@ class Plugin extends BasePlugin {
             'width' => $atts['width'] ?? null,
             'height' => $atts['height'] ?? null,
             'margin' => $atts['margin'] ?? null,
-            'display' => $atts['display'] ?? 'inline',
+            'display' => $atts['display'] ?? null,
         ];
         $flags = '';
         foreach (explode(' ', $content) as $id) {
