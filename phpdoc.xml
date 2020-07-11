@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
-  <title>OpenSums Development plugin for WordPress™ v1.0.0</title>
+  <title>OpenSums Development plugin for WordPress™ v1.1.0</title>
   <parser>
     <target>docs/temp</target>
   </parser>
