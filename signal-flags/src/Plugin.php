@@ -19,7 +19,7 @@ class Plugin extends BasePlugin {
     protected $slug = 'signal-flags';
 
     /** @var string Current version. */
-    protected $version = '1.1.0';
+    protected $version = '1.1.1';
 
     /** @var string Class for install/uninstall. */
     protected $installClass = Install::class;

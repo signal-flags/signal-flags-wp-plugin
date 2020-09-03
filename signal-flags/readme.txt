@@ -2,8 +2,8 @@
 Contributors: opensums
 Tags: flags, signal flags, code flag, sailing
 Requires at least: 4.7
-Tested up to: 5.4.2
-Stable tag: 1.1.0
+Tested up to: 5.5
+Stable tag: 1.1.1
 Requires PHP: 7.2
 License: MIT
 License URI: https://github.com/signal-flags/signal-flags-wp-plugin/blob/master/LICENSE
@@ -70,6 +70,10 @@ Development for the Signal Flags plugin is hosted on [GitHub](https://github.com
 2. Signal Flags plugin settings.
 
 == Changelog ==
+
+= 1.1.1 _14 August 2020_ =
+
+Tested against WordPress 5.5.
 
 = 1.1.0 _11 July 2020_ =
 

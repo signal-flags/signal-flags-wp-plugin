@@ -11,7 +11,7 @@
  * @wordpress ```
  * Plugin Name:       Signal Flags
  * Description:       Display signal flags (ICS) and other nautical flags on your website.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 4.7
  * Requires PHP:      7.2
  * Author:            OpenSums

@@ -17,9 +17,10 @@
     "scripts": {
         "apidocs": "bash ./bin/apidocs.sh",
         "build": "bash ./bin/build.sh",
+        "build:sync": "bash ./bin/sync-svn-repo.sh",
         "build:flags": "php ./bin/build-images.php",
         "test": "./vendor/bin/phpunit",
         "testdocs": "./vendor/bin/phpunit -c phpunit-docs.xml",
-        "version": "bash ./bin/version.sh"
+        "build:version": "bash ./bin/version.sh"
     }
 }

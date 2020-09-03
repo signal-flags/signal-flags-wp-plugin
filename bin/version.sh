@@ -19,6 +19,11 @@ sed -i -E "s/(version = ')[0-9].*(')/\1${VERSION}\2/" ${KEBAB}/src/Plugin.php
 grep -n "version = '" ${KEBAB}/src/Plugin.php
 
 echo
+echo "In ${KEBAB}/readme.txt"
+sed -i -E "s/(Stable tag:\s*)[0-9].*$/\1${VERSION}/" ${KEBAB}/readme.txt
+grep -n "Stable tag:" ${KEBAB}/readme.txt
+
+echo
 echo "In phpdoc.xml"
 sed -i -E "s/(v)[0-9].*(<\/title>)/\1${VERSION}\2/" phpdoc.xml
 grep -n "<title>" phpdoc.xml
